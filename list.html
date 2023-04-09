@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>List</title>
+  <script src="./assets/js/main.js" defer></script>
+</head>
+
+<body style="background-color: #666600">
+  <h2><a href="animee.html">Лучшие аниме</a></h2>
+  <h1><a href="list.html">Список аниме</a></h1>
+  <details>
+    <summary>График</summary>
+    <form>
+      <table cellspacing="10">
+        <tr>
+          <td valign="top">
+
+            <legend><strong>Значение по оси OХ</strong></legend>
+            <input type="radio" name="ox" value="жанр">Жанр<br>
+            <input type="radio" name="ox" value="рейтинг">Рейтинг на shikimori
+          </td>
+          <td valign="top">
+            <legend><strong>Результат</strong></legend>
+            <input type="checkbox" name="result" value="макс">Максимальный рейтинг<br>
+            <input type="checkbox" name="result" value="мин">Минимальный рейтинг<br>
+            <input type="checkbox" name="result" value="колво">Количество аниме
+          </td>
+        </tr>
+      </table>
+      <input type="button" value="Построить">
+    </form>
+  </details>
+  <details>
+    <summary>Фильтр</summary>
+    <form>
+      <table>
+        <tr>
+          <td>
+            Название:
+          </td>
+          <td>
+            <input type="text" id="name" placeholder="Введите название">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Жанр:
+          </td>
+          <td>
+            <input type="text" id="genre" placeholder="Введите жанр">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Возрастной рейтинг:
+          </td>
+          <td>
+            <input type="text" id="vozrate" placeholder="Введите возрастной рейтинг">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Год (от):
+          </td>
+          <td>
+            <input type="number" min="1920" max="2022" id="year1" placeholder="Введите год">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Год (до):
+          </td>
+          <td>
+            <input type="number" min="1920" max="2022" id="year2" placeholder="Введите год">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Рейтинг (от):
+          </td>
+          <td>
+            <input type="number" min="1" max="10" step="0.1" id="rate1" placeholder="Введите рейтинг">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Рейтинг (до):
+          </td>
+          <td>
+            <input type="number" min="1" max="10" step="0.1" id="rate2" placeholder="Введите рейтинг">
+          </td>
+        </tr>
+      </table>
+      <input type="button" value="Найти" onclick="search()">
+    </form>
+  </details>
+  <details>
+    <summary>Сортировка</summary>
+    <form>
+      <table>
+        <tr>
+          <td>
+            Первый уровень:
+          </td>
+          <td>
+            <select id="level1-sort-by">
+              <option value="name">Название</option>
+              <option value="year">Год выхода</option>
+              <option value="rating">Рейтинг на shikimori</option>
+              <option value="age">Возрастной рейтинг</option>
+              <option value="genre">Жанр</option>
+            </select>
+          </td>
+          <td>
+            по убыванию?
+          </td>
+          <td>
+            <input type="checkbox" name="ack1" value="ack1" id="level1-descending">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Второй уровень:
+          </td>
+          <td>
+            <select id="level2-sort-by">
+              <option value="name">Название</option>
+              <option value="year">Год выхода</option>
+              <option value="rating">Рейтинг на shikimori</option>
+              <option value="age">Возрастной рейтинг</option>
+              <option value="genre">Жанр</option>
+            </select>
+          </td>
+          <td>
+            по убыванию?
+          </td>
+          <td>
+            <input type="checkbox" name="ack2" value="ack2" id="level2-descending">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Третий уровень:
+          </td>
+          <td>
+            <select id="level3-sort-by">
+              <option value="name">Название</option>
+              <option value="year">Год выхода</option>
+              <option value="rating">Рейтинг на shikimori</option>
+              <option value="age">Возрастной рейтинг</option>
+              <option value="genre">Жанр</option>
+            </select>
+          </td>
+          <td>
+            по убыванию?
+          </td>
+          <td>
+            <input type="checkbox" name="ack3" value="ack3" id="level3-descending">
+          </td>
+        </tr>
+      </table>
+      <input type="button" value="Сортировать" onclick="sortData()">
+    </form>
+  </details>
+  <table class="table" id="data-table" border="1" width="80%" cellpadding="0" cellspacing="0">
+    <tr>
+      <td>Название</td>
+      <td>Год выхода</td>
+      <td>Рейтинг на shikimori</td>
+      <td>Возрастной рейтинг</td>
+      <td>Жанр</td>
+    </tr>
+    <tr>
+      <td>Стальной алхимик</td>
+      <td>2009</td>
+      <td>9.12</td>
+      <td>R-17</td>
+      <td>Сёнен</td>
+    </tr>
+    <tr>
+      <td>Врата Штейна</td>
+      <td>2011</td>
+      <td>9.08</td>
+      <td>PG-13</td>
+      <td>Психологическое</td>
+    </tr>
+    <tr>
+      <td>Госпожа Кагуя</td>
+      <td>2022</td>
+      <td>9.10</td>
+      <td>PG-13</td>
+      <td>Сэйнэн</td>
+    </tr>
+    <tr>
+      <td>Гинтама 4</td>
+      <td>2015</td>
+      <td>9.08</td>
+      <td>PG-13</td>
+      <td>Сёнен</td>
+    </tr>
+    <tr>
+      <td>Реинкарнация безработного</td>
+      <td>2021</td>
+      <td>8.37</td>
+      <td>R-17</td>
+      <td>Этти</td>
+    </tr>
+    <tr>
+      <td>Берсерк</td>
+      <td>1997</td>
+      <td>8.55</td>
+      <td>R+</td>
+      <td>Сэйнэн</td>
+    </tr>
+    <tr>
+      <td>Глейпнир</td>
+      <td>2020</td>
+      <td>7.01</td>
+      <td>R-17</td>
+      <td>Этти</td>
+    </tr>
+    <tr>
+      <td>Ярко-красная операция</td>
+      <td>2013</td>
+      <td>6.45</td>
+      <td>R+</td>
+      <td>Этти</td>
+    </tr>
+    <tr>
+      <td>Ван-Пис</td>
+      <td>1999</td>
+      <td>8.63</td>
+      <td>PG-13</td>
+      <td>Сёнен</td>
+    </tr>
+    <tr>
+      <td>Банановая рыба</td>
+      <td>2018</td>
+      <td>8.51</td>
+      <td>R-17</td>
+      <td>Сёдзё</td>
+    </tr>
+    <tr>
+      <td>Нана</td>
+      <td>2006</td>
+      <td>8.5</td>
+      <td>R+</td>
+      <td>Сёдзё</td>
+    </tr>
+    <tr>
+      <td>Красавица-воин Сейлор Мун: Сейлор-звезды</td>
+      <td>1996</td>
+      <td>7.93</td>
+      <td>PG-13</td>
+      <td>Сёдзё</td>
+    </tr>
+    <tr>
+      <td>Семья шпиона</td>
+      <td>2022</td>
+      <td>8.75</td>
+      <td>PG-13</td>
+      <td>Комедия</td>
+    </tr>
+    <tr>
+      <td>Крутой учитель Онидзука</td>
+      <td>1999</td>
+      <td>8.69</td>
+      <td>R-17</td>
+      <td>Комедия</td>
+    </tr>
+    <tr>
+      <td>Моб Психо 100</td>
+      <td>2019</td>
+      <td>8.81</td>
+      <td>PG-13</td>
+      <td>Комедия</td>
+    </tr>
+    <tr>
+      <td>Ковбой Бибоп</td>
+      <td>1998</td>
+      <td>8.77</td>
+      <td>R+</td>
+      <td>Экшен</td>
+    </tr>
+    <tr>
+      <td>Блич: Тысячелетняя кровавая война</td>
+      <td>2022</td>
+      <td>9.07</td>
+      <td>R-17</td>
+      <td>Сёнен</td>
+    </tr>
+    <tr>
+      <td>Киберпанк: Бегущие по краю</td>
+      <td>2022</td>
+      <td>8.7</td>
+      <td>R+</td>
+      <td>Экшен</td>
+    </tr>
+    <tr>
+      <td>Невероятное приключение ДжоДжо: Золотой ветер</td>
+      <td>2018</td>
+      <td>8.58</td>
+      <td>R-17</td>
+      <td>Экшен</td>
+    </tr>
+    <tr>
+      <td>Человек-бензопила</td>
+      <td>2022</td>
+      <td>8.88</td>
+      <td>R-17</td>
+      <td>Сёнен</td>
+    </tr>
+    <tr>
+      <td>Пинг-понг</td>
+      <td>2014</td>
+      <td>8.62</td>
+      <td>PG-13</td>
+      <td>Сэйнэн</td>
+    </tr>
+    <tr>
+      <td>Унесённые призраками</td>
+      <td>2001</td>
+      <td>8.79</td>
+      <td>PG</td>
+      <td>Приключения</td>
+    </tr>
+    <tr>
+      <td>Небесный замок Лапута</td>
+      <td>1986</td>
+      <td>8.27</td>
+      <td>PG</td>
+      <td>Приключения</td>
+    </tr>
+    <tr>
+      <td>Волшебное лето</td>
+      <td>2007</td>
+      <td>7.52</td>
+      <td>PG</td>
+      <td>Сёнен</td>
+    </tr>
+    <tr>
+      <td>Принцесса Мононоке</td>
+      <td>1997</td>
+      <td>8.69</td>
+      <td>PG-13</td>
+      <td>Приключения</td>
+    </tr>
+    <tr>
+      <td>Восемьдесят шесть</td>
+      <td>2021</td>
+      <td>8.71</td>
+      <td>R-17</td>
+      <td>Экшен</td>
+    </tr>
+    <tr>
+      <td>Ходячий замок</td>
+      <td>2004</td>
+      <td>8.66</td>
+      <td>G</td>
+      <td>Приключения</td>
+    </tr>
+    <tr>
+      <td>Мастер муси</td>
+      <td>2005</td>
+      <td>8.68</td>
+      <td>PG-13</td>
+      <td>Сэйнэн</td>
+    </tr>
+    <tr>
+      <td>Золотой парень</td>
+      <td>1995</td>
+      <td>8.02</td>
+      <td>R+</td>
+      <td>Этти</td>
+    </tr>
+    <tr>
+      <td>Волчьи дети Амэ и Юки</td>
+      <td>2012</td>
+      <td>8.61</td>
+      <td>G</td>
+      <td>Фэнтези</td>
+    </tr>
+    <tr>
+      <td>В лес, где мерцают светлячки</td>
+      <td>2011</td>
+      <td>8.33</td>
+      <td>G</td>
+      <td>Сёдзё</td>
+    </tr>
+    <tr>
+      <td>Мой сосед Тоторо</td>
+      <td>1988</td>
+      <td>8.27</td>
+      <td>G</td>
+      <td>Приключения</td>
+    </tr>
+    <tr>
+      <td>Вайолет Эвергарден</td>
+      <td>2018</td>
+      <td>8.66</td>
+      <td>PG-13</td>
+      <td>Фэнтези</td>
+    </tr>
+    <tr>
+      <td>Рейтинг короля</td>
+      <td>2021</td>
+      <td>8.59</td>
+      <td>PG-13</td>
+      <td>Фэнтези</td>
+    </tr>
+    <tr>
+      <td>Мононокэ</td>
+      <td>2007</td>
+      <td>8.43</td>
+      <td>R-17</td>
+      <td>Сэйнэн</td>
+    </tr>
+    <tr>
+      <td>Навсикая из Долины ветров</td>
+      <td>2007</td>
+      <td>8.37</td>
+      <td>PG-13</td>
+      <td>Фэнтези</td>
+    </tr>
+    <tr>
+      <td>О моём перерождении в слизь</td>
+      <td>2021</td>
+      <td>8.32</td>
+      <td>PG-13</td>
+      <td>Экшен</td>
+    </tr>
+    <tr>
+      <td>Монстр</td>
+      <td>2004</td>
+      <td>8.83</td>
+      <td>R+</td>
+      <td>Сэйнэн</td>
+    </tr>
+    <tr>
+      <td>Евангелион нового поколения</td>
+      <td>1997</td>
+      <td>8.54</td>
+      <td>R+</td>
+      <td>Психологическое</td>
+    </tr>
+    <tr>
+      <td>Психопаспорт</td>
+      <td>2012</td>
+      <td>8.36</td>
+      <td>R-17</td>
+      <td>Психологическое</td>
+    </tr>
+    <tr>
+      <td>Идеальная грусть</td>
+      <td>1998</td>
+      <td>8.53</td>
+      <td>R+</td>
+      <td>Психологическое</td>
+    </tr>
+    <tr>
+      <td>Добро пожаловать в NHK</td>
+      <td>2006</td>
+      <td>8.32</td>
+      <td>R+</td>
+      <td>Комедия</td>
+    </tr>
+    <tr>
+      <td>Ванпанчмен</td>
+      <td>2015</td>
+      <td>8.51</td>
+      <td>R-17</td>
+      <td>Комедия</td>
+    </tr>
+    <tr>
+      <td>Юная революционерка Утэна</td>
+      <td>1997</td>
+      <td>8.18</td>
+      <td>PG-13</td>
+      <td>Сёдзё</td>
+    </tr>
+    <tr>
+      <td>Бьюти-блогер</td>
+      <td>2018</td>
+      <td>6.74</td>
+      <td>PG-13</td>
+      <td>Сёдзё</td>
+    </tr>
+    <tr>
+      <td>Сага о Винланде</td>
+      <td>2019</td>
+      <td>8.73</td>
+      <td>R-17</td>
+      <td>Сэйнэн</td>
+    </tr>
+    <tr>
+      <td>Наруто</td>
+      <td>2002</td>
+      <td>7.97</td>
+      <td>PG-13</td>
+      <td>Сёнен</td>
+    </tr>
+    <tr>
+      <td>Чёрный клевер</td>
+      <td>2017</td>
+      <td>8.13</td>
+      <td>PG-13</td>
+      <td>Сёнен</td>
+    </tr>
+    <tr>
+      <td>Моя геройская академия</td>
+      <td>2016</td>
+      <td>7.93</td>
+      <td>PG-13</td>
+      <td>Сёнен</td>
+    </tr>
+    <tr>
+      <td>Волейбол!!</td>
+      <td>2014</td>
+      <td>8.46</td>
+      <td>PG-13</td>
+      <td>Сёнен</td>
+    </tr>
+  </table>
+</body>
+
+</html>
